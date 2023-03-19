@@ -1,0 +1,28 @@
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="rslidar2base_link" args="0 0 0 0 0 0 base_link rslidar 100" />
+    <node pkg="tf" type="static_transform_publisher" name="odom_to_map" args="0 0 0 0 0 0 1  /map /odom 10" />
+
+    <node pkg="rviz"  type="rviz"  name="matching_rviz"  args="-d $(find lidar_localization)/rviz/matching.rviz"></node>
+
+    <node pkg="lidar_localization"  type="data_pretreat_node"  name="data_pretreat_node"  output="screen"></node>
+
+    <node pkg="lidar_localization"  type="image_projection_node"  name="image_projection_node"  output="screen"></node>
+
+    <node pkg="lidar_localization"  type="feature_extraction_node"  name="feature_extraction_node"  output="screen"></node>
+
+    <node pkg="lidar_localization"  type="matching_node"  name="fea_matching_node"  output="screen"></node>
+    
+    <!-- 激光雷达到map的位姿转到base_link到map的位姿，并发布odom和tf -->
+    <node pkg="lidar_localization"  type="odom2tf_node"  name="odom2tf_node"  output="screen"></node>
+    
+    <!-- rviz中通过2D Pose Estimate按钮手动设定初始位姿，实现重定位 -->
+    <node pkg="lidar_localization"  type="pub_odom_node"  name="pub_odom_node"  output="screen"></node>
+
+    <!-- scancontext搜索最近邻关键帧，实现重定位 -->
+    <node pkg="lio_sam"  type="sc_pose"  name="sc_pose"  output="screen"></node>
+
+    <!-- rslidar_to_velodyne -->
+    <node pkg="lio_sam" type="rs_to_velodyne" name="rs_to_velodyne" args="XYZIRT XYZIRT"/>
+    
+</launch>

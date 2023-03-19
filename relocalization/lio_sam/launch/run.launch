@@ -1,0 +1,18 @@
+<launch>
+
+    <arg name="project" default="lio_sam"/>
+    
+    <!-- Parameters -->
+    <rosparam file="$(find lio_sam)/config/params.yaml" command="load" />
+    
+    <node pkg="$(arg project)" type="$(arg project)_imuPreintegration"   name="$(arg project)_imuPreintegration"    output="screen" 	respawn="true"/>
+    <node pkg="$(arg project)" type="$(arg project)_imageProjection"     name="$(arg project)_imageProjection"      output="screen"     respawn="true"/>
+    <node pkg="$(arg project)" type="$(arg project)_featureExtraction"   name="$(arg project)_featureExtraction"    output="screen"     respawn="true"/>
+    <node pkg="$(arg project)" type="$(arg project)_mapOptmization"      name="$(arg project)_mapOptmization"       output="screen"     respawn="true"/>
+
+    <!--- Run Rviz-->
+    <node pkg="rviz" type="rviz" name="$(arg project)_rviz" args="-d $(find lio_sam)/rviz//rviz.rviz" />
+
+    <node pkg="$(arg project)" type="rs_to_velodyne" name="rs_to_velodyne" args="XYZIRT XYZIRT" output="screen"/>
+
+</launch>

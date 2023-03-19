@@ -1,0 +1,16 @@
+obstacle_range: 2.5 #代价地图中的障碍物信息的阈值，2.5m表示只会更新距离移动机器人2.5米以内的障碍物的信息。#TODO
+raytrace_range: 3.5 #确定了用于清除指定范围外的空间。将其设置为3.5米，这意味着机器人将尝试清除3.5m外的空间，在代价地图中清除3.5米外的障碍物 #TODO
+# footprint: [[-0.08, -0.15], [-0.08, 0.15],[0.42, 0.15], [0.42, -0.15]]
+robot_radius: 0.71 #机器人半径 #TODO，算一下车体中心到四个角的距离
+inflation_radius: 0.5 #全局代价地图膨胀半径,通过设置此值大于机器人半径，可以避免与障碍物碰撞。#TODO
+transform_tolerance: 0.5 #等待坐标变换发布信息的超时时间
+
+observation_sources: scan
+
+scan: 
+  data_type: LaserScan 
+  topic: scan 
+  marking: true 
+  clearing: true #marking和clearing参数确定传感器是否向代价地图添加障碍物信息或从代价地图中清除障碍物信息，或者同时都做
+
+map_type: costmap

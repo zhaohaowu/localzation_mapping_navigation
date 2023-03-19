@@ -1,0 +1,7 @@
+
+uint8[8] cRate
+
+-------
+
+uint8[8] sfRate
+uint8[8] sControl

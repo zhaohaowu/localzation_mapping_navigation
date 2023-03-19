@@ -1,0 +1,53 @@
+#---standard pioneer footprint---
+#---(in meters)---
+# footprint: [ [0.254, -0.0508], [0.1778, -0.0508], [0.1778, -0.1778], [-0.1905, -0.1778], [-0.254, 0], [-0.1905, 0.1778], [0.1778, 0.1778], [0.1778, 0.0508], [0.254, 0.0508] ]
+# footprint: [ [0.8,0.3], [0.8,-0.3], [-0,-0.3], [0,0.3] ]
+footprint: [ [0.8,0.3], [0.8,-0.3], [-0,-0.3], [0,0.3] ]
+# footprint_padding: 0.1
+
+transform_tolerance: 0.2
+map_type: costmap
+#For this example we'll configure the costmap in voxel-grid mode
+# map_type: voxel
+#Voxel grid specific parameters
+# origin_z:             0.0
+# z_resolution:         0.2
+# z_voxels:             2
+# unknown_threshold: 9
+# mark_threshold: 0
+#Set the tolerance we're willing to have for tf transforms
+transform_tolerance: 1.2
+# mark_threshold: 0
+#Set the tolerance we're willing to have for tf transforms
+transform_tolerance: 1.2
+# min_obstacle_height
+# max_obstacle_height
+
+obstacle_layer:
+  enabled: true
+  max_obstacle_height: 3.5
+  obstacle_range: 8.0
+  raytrace_range: 12.0
+  inflation_radius: 0.4
+  origin_z: 0.0
+  z_resolution: 0.2
+  z_voxels: 2
+  track_unknown_space: false # false
+  combination_method: 1
+  always_send_full_costmap: false
+
+  observation_sources: scan_sensor_1
+  scan_sensor_1: {data_type: LaserScan,   topic: scan,         sensor_frame: rslidar,  expected_update_rate: 1.0, observation_persistence: 1.0, inf_is_valid: true, marking: true, clearing: true}
+  # scan_sensor_2: {data_type: LaserScan,   topic: scan_filtered,   sensor_frame: laser,    expected_update_rate: 1.0, observation_persistence: 1.0, inf_is_valid: true, marking: true, clearing: true}
+  # scan_sensor_3: {data_type: LaserScan, topic: laser_scan_2, sensor_frame: laser_2,  expected_update_rate: 1.0, observation_persistence: 1.0, inf_is_valid: true, marking: true, clearing: true}
+  # scan_sensor_4: {data_type: LaserScan, topic: scan,         sensor_frame: velodyne, expected_update_rate: 1.0, observation_persistence: 1.0, inf_is_valid: true, marking: true, clearing: true}
+
+inflation_layer:
+  enabled:              true
+  cost_scaling_factor:  10.0  # exponential rate at which the obstacle cost drops off (default:10)
+  inflation_radius:     0.8  #0.8 max. distance from an obstacle at which costs are incurred for planning paths.
+
+static_layer:
+  enabled:              true
+  map_topic:            "map"
+  track_unknown_space:  true # true

@@ -1,0 +1,12 @@
+sc_type: max_height #max_height
+
+LIDAR_HEIGHT: 1 #2
+PC_NUM_RING: 20
+PC_NUM_SECTOR: 60
+PC_MAX_RADIUS: 80.0
+NUM_EXCLUDE_RECENT: 50
+NUM_CANDIDATES_FROM_TREE: 10
+
+level_num: 5
+max_hight: 8
+level_contain_num: 30

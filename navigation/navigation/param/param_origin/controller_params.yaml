@@ -1,0 +1,25 @@
+controller: #子命名空间，由于该参数文件是在move_base包下加载的，所以会加前缀move_base,因此这里的参数前缀均为：/move_base/controller/ + ...
+ control_rate: 50.0
+
+ pose_topic: "/odom"
+ velocity_topic: "/wheel/data"
+ local_traj_topic: "/move_base/TebLocalPlannerROS/local_trajectory_pub"
+ control_command_topic: "control_command"
+
+ v_max: 2 #最大速度 3 m/s
+ delta_f_max: 0.5586 #最大前轮转角 32 deg
+ speed_bound: 0.5 # 高低速的界限
+ high_speed_ld: 1.0 #速度较大时的纯跟踪前视距离
+ low_speed_ld:  0.2 #速度较小时的纯跟踪前视距离
+ judge_num: 5  
+
+ 
+ Kp: 1.0 # PID prameters
+ Ki: 0.0
+ Kd: 0.1
+ K: 1.0 # PP paramters
+ epsilon: 0.01
+ wheel_base: 0.65 # 轴距
+
+
+

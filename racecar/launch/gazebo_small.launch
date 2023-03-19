@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="world_name" default="lv" />
+  <arg name="gui" default="true" />
+  <arg name="run_camera" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find racecar)/world/$(arg world_name).world"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find racecar)/urdf_small/racecar.xacro'" />
+
+  <node  name="racecar_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+              args="-urdf -param robot_description -model racecar -x 0 -y 0 -z 0.05 " />
+
+  <rosparam file="$(find racecar)/config/racecar_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_manager" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/racecar" args="
+        left_front_wheel_velocity_controller right_front_wheel_velocity_controller
+        left_steering_hinge_position_controller right_steering_hinge_position_controller
+        joint_state_controller"/>
+  
+  <!-- <node name="controller_manager" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/racecar" args="
+        left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller
+        left_front_wheel_velocity_controller right_front_wheel_velocity_controller
+        left_steering_hinge_position_controller right_steering_hinge_position_controller
+        joint_state_controller"/> -->
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="/racecar/joint_states" />
+  </node>
+
+  <node pkg="racecar" name="gazebo_odometry" type="gazebo_odometry.py"/>
+  <node pkg="racecar" type="nav_sim.py" name="nav_sim" />
+  <node pkg="racecar" type="servo_commands.py" name="servo_commands"/>
+  
+  <node pkg="racecar" name="odom2path"  type="odom2path" output="screen" />
+</launch>

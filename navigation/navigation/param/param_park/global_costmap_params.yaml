@@ -1,0 +1,9 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_link
+  update_frequency: 1.0 #全局代价地图更新频率小，在1到5hz之间
+  publish_frequency: 0.5  #对于静态全局地图，不需要不断发布
+  static_map: true #由mapserver提供的地图服务进行代价地图初始化
+  transform_tolerance: 0.5 #发布tf变换的超时时间
+  cost_scaling_factor: 10.0 #障碍物膨胀比例系数，全局路径呈锯齿状时调大,使得全局路径较平滑
+  inflation_radius: 0.5 #全局代价地图膨胀半径  #TODO

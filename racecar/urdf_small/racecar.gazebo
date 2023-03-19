@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<robot name="racecar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- Gazebo references -->
+
+<gazebo reference="chassis">
+  <mu1 value="0.0"/>
+  <mu2 value="0.0"/>
+  <kp  value="10000000.0" />
+  <kd  value="1.0" />
+  <material>Gazebo/Orange</material>
+</gazebo>
+
+<gazebo reference="left_rear_wheel">
+  <mu1 value="1.0"/>
+  <mu2 value="1.0"/>
+  <kp  value="10000000.0" />
+  <kd  value="1.0" />
+  <fdir1 value="1 0 0"/>
+  <material>Gazebo/Green</material>
+</gazebo>
+
+<gazebo reference="right_rear_wheel">
+  <mu1 value="1.0"/>
+  <mu2 value="1.0"/>
+  <kp  value="10000000.0" />
+  <kd  value="1.0" />
+  <fdir1 value="1 0 0"/>
+  <material>Gazebo/Green</material>
+</gazebo>
+
+<gazebo reference="left_front_wheel">
+  <mu1 value="1.0"/>
+  <mu2 value="1.0"/>
+  <kp  value="10000000.0" />
+  <kd  value="1.0" />
+  <fdir1 value="0 0 1"/>
+  <material>Gazebo/Green</material>
+</gazebo>
+
+<gazebo reference="right_front_wheel">
+  <mu1 value="1.0"/>
+  <mu2 value="1.0"/>
+  <kp  value="10000000.0" />
+  <kd  value="1.0" />
+  <fdir1 value="0 0 1"/>
+  <material>Gazebo/Green</material>
+</gazebo>
+
+<!-- Gazebo plugins -->
+
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/racecar</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <legacyModeNS>true</legacyModeNS>
+  </plugin>
+</gazebo>
+
+  <!-- hokuyo -->
+<xacro:unless value="$(optenv DISABLE_GAZEBO_LASER false)">
+  <gazebo reference="laser">
+    <material>Gazebo/Grey</material>
+    <sensor type="ray" name="hokuyo_sensor">
+      <pose>0 0 0.0124 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>100</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>6.28</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>200.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+</xacro:unless>
+
+
+
+
+<!-- IMU plugin  -->
+<xacro:unless value="$(optenv DISABLE_GAZEBO_CAMERA false)">
+  <gazebo>  
+      <plugin name="imu" filename="libhector_gazebo_ros_imu.so">  
+          <updateRate>30.0</updateRate>  
+          <topicName>imu/data</topicName>    
+          <offset>0 0 0</offset>  
+          <velocityGaussianNoise>0 0 0</velocityGaussianNoise>  
+          <frameId>base_link</frameId>  
+      </plugin>  
+  </gazebo> 
+</xacro:unless>
+
+
+
+<!-- Velodyne plugin -->
+<xacro:unless value="$(optenv DISABLE_GAZEBO_LASER false)">
+  <gazebo reference="velodyne">
+        <sensor type="ray" name="velodyne-VLP16">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>false</visualize>
+          <update_rate>10</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>1875</samples>
+                <resolution>1</resolution>
+                <min_angle>-3.14</min_angle>
+                <max_angle>3.14</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>32</samples>
+                <resolution>1</resolution>
+                <min_angle>-0.26</min_angle>
+                <max_angle> 0.26</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>0.3</min>
+              <max>131</max>
+              <resolution>0.001</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </ray>
+          <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+            <topicName>/velodyne_points</topicName>
+            <frameName>velodyne</frameName>
+            <organize_cloud>false</organize_cloud>
+            <min_range>0.9</min_range>
+            <max_range>130</max_range>
+            <gaussianNoise>0</gaussianNoise>
+          </plugin>
+        </sensor>
+  </gazebo>
+</xacro:unless>
+
+<!--imu Plugin-->
+<xacro:unless value="$(optenv DISABLE_GAZEBO_LASER false)">
+    <gazebo reference="imu_link">
+        <gravity>true</gravity>
+        <sensor name="imu_sensor" type="imu">
+            <always_on>true</always_on>
+            <update_rate>500</update_rate>
+            <visualize>true</visualize>
+            <topic>__default_topic__</topic>
+            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                <topicName>imu</topicName>         
+                <bodyName>imu_link</bodyName>
+                <updateRateHZ>500.0</updateRateHZ>    
+                <gaussianNoise>0.0</gaussianNoise>   
+                <xyzOffset>0 0 0</xyzOffset>     
+                <rpyOffset>0 0 0</rpyOffset>
+                <frameName>imu_link</frameName>        
+            </plugin>
+            <pose>0 0 0 0 0 0</pose>
+        </sensor>
+    </gazebo>
+</xacro:unless>
+</robot>
+
+

@@ -1,0 +1,12 @@
+shutdown_costmaps: false #当move_base在不活动状态时,是否关掉costmap.
+
+controller_frequency: 10.0 #向底盘控制移动话题cmd_vel发送命令的频率.#TODO
+controller_patience: 3.0 #在空间清理操作执行前,控制器花多长时间等有效控制下发.
+
+planner_frequency: 0.1 #全局规划操作的执行频率.如果设置为0.0,则全局规划器仅在接收到新的目标点或者局部规划器报告路径堵塞时才会重新执行规划操作 #TODO
+planner_patience: 5.0 #规划路径最大容忍时间
+
+oscillation_timeout: 100.0 #执行修复机制前,允许振荡的时长
+oscillation_distance: 0.2 #来回运动在多大距离以上不会被认为是振荡
+
+conservative_reset_dist: 0.1 #清除机制的参数，决定清除多远处的障碍

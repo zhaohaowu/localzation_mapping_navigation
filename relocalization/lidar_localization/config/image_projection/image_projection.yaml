@@ -1,0 +1,7 @@
+sensor_min_range: 0.0   # 激光的有效距离（小于这个距离的点都会被skip）
+sensor_segment_range: 0.0 # 除了地面点，其余segmented点的有效距离（过近的平面点会对旋转匹配结果产生较大的影响，尤其是动态物体）
+sensor_mount_range: -5.0 # 传感器的安装角度
+segment_theta: 45.0     # 分割角度的阈值
+segment_valid_point_num: 5  # 聚类中点少于30个，但是超过这个阈值，进行竖直方向上的分割
+segment_valid_line_num: 3   # 超过3条线，则保留分割结果
+

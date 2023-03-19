@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <rosparam file="$(find pcd2map)/config/pcd2map_park.yaml" command="load"/>
+  <node name="pcd2map" pkg="pcd2map" type="pcd2map" />
+
+  <!-- Load octomap node -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+    <param name="resolution" value="0.2" />
+    <param name="frame_id" type="string" value="map" />
+    <param name="sensor_model/max_range" value="100.0" />
+    <param name="latch" value="true" />
+    <param name="pointcloud_max_z" value="1" />
+    <param name="pointcloud_min_z" value="0" />
+    <remap from="/cloud_in" to="/pointcloud/output" />
+  </node>
+
+  <node pkg="map_server" type="map_saver" name="map_saver" args="/map:=/projected_map -f /home/vd/lv_ws/src/navigation/map/park/park"/>
+
+  <!-- RViz -->
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find pcd2map)/rviz/OctomapShow.rviz"/>
+
+</launch>
+
+ 
+
+		
+ 

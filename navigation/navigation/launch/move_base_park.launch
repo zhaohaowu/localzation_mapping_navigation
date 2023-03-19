@@ -1,0 +1,35 @@
+<launch>
+    <include file="$(find pointcloud_to_laserscan)/launch/point_to_scan.launch"/>
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find navigation)/param/param_park/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+        <rosparam file="$(find navigation)/param/param_park/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find navigation)/param/param_park/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find navigation)/param/param_park/global_costmap_params.yaml" command="load" /> 
+        <rosparam file="$(find navigation)/param/param_park/base_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find navigation)/param/param_park/move_base_params.yaml" command="load" />
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+
+        <!-- <rosparam file="$(find navigation)/param/param/costmap_common_params.yaml"    command="load" ns="global_costmap" />
+        <rosparam file="$(find navigation)/param/param/costmap_common_params.yaml"    command="load" ns="local_costmap" />
+        <rosparam file="$(find navigation)/param/param/global_costmap_params.yaml"    command="load" />
+        <rosparam file="$(find navigation)/param/param/local_costmap_params.yaml"     command="load" />
+        <rosparam file="$(find navigation)/param/param/teb_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find navigation)/param/param/costmap_converter_params.yaml" command="load" />
+        <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+        <param name="planner_frequency" value="0.2" />
+        <param name="planner_patience" value="5.0" />
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+        <param name="controller_frequency" value="10.0" />
+        <param name="controller_patience" value="10.0" /> -->
+    </node>
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find navigation)/map/park/park.yaml" output="screen">
+        <param name="frame_id" value="map"/>
+    </node>
+    <node name="can_server_emcb"   pkg="can_com"        type="can_server_emcb" />
+    <node name="can_capture_emcb"  pkg="can_com"        type="can_capture_emcb" />
+    
+    <node pkg="navigation" type="odom2path2" name="odom2path2"/>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find navigation)/rviz/nav.rviz"/>
+
+</launch> 
+

@@ -1,0 +1,13 @@
+local_costmap:
+  global_frame: map
+  robot_base_frame: base_link
+  update_frequency: 5.0
+  publish_frequency: 2.0
+  static_map: false
+  rolling_window: true #参数设置为true意味着当机器人移动时，保持机器人在本地代价地图中心。
+  width: 5 #局部代价地图宽度，米
+  height: 5 #局部代价地图高度，米
+  resolution: 0.05 #局部代价地图分辨率，米每单元格，和静态地图保持一致
+  transform_tolerance: 0.5 #等待坐标变换发布信息的超时时间
+  cost_scaling_factor: 5 #调整地图上标记为障碍物的区域的成本值的权重的常数。
+  inflation_radius: 0.3 #局部代价地图膨胀半径，大于机器人半径 #TODO
